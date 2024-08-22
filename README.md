@@ -1,6 +1,6 @@
 # Meu Back-End
 
-Back-end do MVP **Bloco de Notas**
+Back-end do MVP **Bloco de Notas** (Microsserviço de Front-End)
 
 ---
 ## Como executar
@@ -47,12 +47,9 @@ Em modo de desenvolvimento é recomendado executar utilizando o parâmetro reloa
 ```
 (myenv)$ flask run --host 0.0.0.0 --port 5000 --reload
 ```
-
-Abra o [http://localhost:5000/api/#/](http://localhost:5000/api/#/) no navegador para verificar o status da API em execução.
-
 ---
 ## Como executar em docker
 
 ```
-$ docker-compose up
+$ 
 ```
