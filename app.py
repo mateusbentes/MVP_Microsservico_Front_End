@@ -16,8 +16,12 @@ def notas():
 
     if request.method == 'POST':
         requisicao = request.json
-        response = requests.post(API_URL, json=requisicao)
-        return jsonify(response.json())
+        response_local = requests.post(API_URL, json=requisicao)
+        response_notion = requests.post('http://127.0.0.1:5002/', json=requisicao)
+        return jsonify({
+            "local_response": response_local.json(),
+            "notion_response": response_notion.json()
+        })
 
     if request.method == 'PUT':
         requisicao = request.json
@@ -28,6 +32,10 @@ def notas():
         requisicao = request.json
         response = requests.delete(API_URL, json=requisicao)
         return jsonify(response.json())
+    
+    requisicao = request.get_json()
+    # Envia a nota para o microsserviço do Notion
+    return jsonify(response.json())
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
