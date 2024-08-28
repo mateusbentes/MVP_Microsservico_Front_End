@@ -17,15 +17,15 @@ def notas():
     if request.method == 'POST':
         requisicao = request.json
         try:
-            #resposta_local = requests.post(API_URL, json=requisicao)
-            #resposta_local.raise_for_status()
+            resposta_local = requests.post(API_URL, json=requisicao)
+            resposta_local.raise_for_status()
             resposta_box = requests.post('http://127.0.0.1:5002/', json=requisicao)
             resposta_box.raise_for_status()
         except requests.exceptions.RequestException as e:
             return jsonify({"error": str(e)}), 500
     
         return jsonify({
-            #"resposta_local": resposta_local.json(),
+            "resposta_local": resposta_local.json(),
             "resposta_box": resposta_box.json()
         })
 
