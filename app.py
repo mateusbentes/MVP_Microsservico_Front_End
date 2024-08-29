@@ -6,7 +6,8 @@ app = Flask(__name__)
 
 CORS(app)
 
-API_URL = 'http://127.0.0.1:5001'
+API_URL = 'http://127.0.0.1:5001'  # URL do microsserviço de banco de dados
+BOX_URL = 'http://127.0.0.1:5002'  # URL do microsserviço do Box
 
 @app.route('/', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def notas():
@@ -16,14 +17,15 @@ def notas():
 
     if request.method == 'POST':
         requisicao = request.json
-        try:
-            resposta_local = requests.post(API_URL, json=requisicao)
-            resposta_local.raise_for_status()
-            resposta_box = requests.post('http://127.0.0.1:5002/', json=requisicao)
-            resposta_box.raise_for_status()
-        except requests.exceptions.RequestException as e:
-            return jsonify({"error": str(e)}), 500
-    
+
+        # Faz a requisição para o microsserviço de banco de dados
+        resposta_local = requests.post(API_URL, json=requisicao)
+        resposta_local.raise_for_status()
+
+        # Faz a requisição para o microsserviço do Box
+        resposta_box = requests.post(BOX_URL, json=requisicao)
+        resposta_box.raise_for_status()
+
         return jsonify({
             "resposta_local": resposta_local.json(),
             "resposta_box": resposta_box.json()
