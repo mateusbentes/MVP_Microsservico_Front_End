@@ -11,10 +11,12 @@ BOX_URL = 'http://127.0.0.1:5002'  # URL do microsserviço do Box
 
 @app.route('/', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def notas():
+    # Método GET
     if request.method == 'GET':
         resposta = requests.get(API_URL)
         return jsonify(resposta.json())
 
+    # Método POST
     if request.method == 'POST':
         requisicao = request.json
 
@@ -31,18 +33,20 @@ def notas():
             "resposta_box": resposta_box.json()
         })
 
+    # Método PUT
     if request.method == 'PUT':
         requisicao = request.json
         resposta = requests.put(API_URL, json=requisicao)
         return jsonify(resposta.json())
 
+    # Método DELETE
     if request.method == 'DELETE':
         requisicao = request.json
         resposta = requests.delete(API_URL, json=requisicao)
         return jsonify(resposta.json())
     
     requisicao = request.get_json()
-    # Envia a nota para o microsserviço do Notion
+    # Envia a nota para o microsserviço do BOX
     return jsonify(resposta.json())
 
 if __name__ == '__main__':
