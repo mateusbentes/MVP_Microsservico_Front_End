@@ -17,7 +17,7 @@ def notas():
         return jsonify(resposta.json())
 
     # Método POST
-    if request.method == 'POST':
+    elif request.method == 'POST':
         requisicao = request.json
 
         # Faz a requisição para o microsserviço de banco de dados
@@ -34,13 +34,24 @@ def notas():
         })
 
     # Método PUT
-    if request.method == 'PUT':
+    elif request.method == 'PUT':
         requisicao = request.json
-        resposta = requests.put(API_URL, json=requisicao)
-        return jsonify(resposta.json())
+
+        # Faz a requisição para o microsserviço de banco de dados
+        resposta_local = requests.put(API_URL, json=requisicao)
+        resposta_local.raise_for_status()
+
+        # Faz a requisição para o microsserviço do Box
+        resposta_box = requests.put(BOX_URL, json=requisicao)
+        resposta_box.raise_for_status()
+
+        return jsonify({
+            "resposta_local": resposta_local.json(),
+            "resposta_box": resposta_box.json()
+        })
 
     # Método DELETE
-    if request.method == 'DELETE':
+    elif request.method == 'DELETE':
         requisicao = request.json
         resposta = requests.delete(API_URL, json=requisicao)
         return jsonify(resposta.json())
