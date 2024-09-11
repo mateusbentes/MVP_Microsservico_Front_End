@@ -53,8 +53,19 @@ def notas():
     # Método DELETE
     elif request.method == 'DELETE':
         requisicao = request.json
-        resposta = requests.delete(API_URL, json=requisicao)
-        return jsonify(resposta.json())
+
+        # Faz a requisição para o microsserviço de banco de dados
+        resposta_local = requests.delete(API_URL, json=requisicao)
+        resposta_local.raise_for_status()
+
+        # Faz a requisição para o microsserviço do Box
+        resposta_box = requests.delete(BOX_URL, json=requisicao)
+        resposta_box.raise_for_status()
+
+        return jsonify({
+            "resposta_local": resposta_local.json(),
+            "resposta_box": resposta_box.json()
+        })
     
     requisicao = request.get_json()
     # Envia a nota para o microsserviço do BOX
